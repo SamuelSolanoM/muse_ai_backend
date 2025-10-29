@@ -8,6 +8,7 @@ import com.muse_ai.logic.entity.rol.RoleRepository;
 import com.muse_ai.logic.entity.user.LoginResponse;
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
+import com.muse_ai.rest.auth.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
+import com.muse_ai.logic.entity.user.ArtLevel;
+import com.muse_ai.logic.entity.http.HttpResponse;
+
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -76,6 +84,38 @@ public class AuthRestController {
         user.setRole(optionalRole.get());
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
+        if (userRepository.existsByEmail(req.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new HttpResponse<>("El correo ya está en uso"));
+        }
+
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.USER);
+        if (optionalRole.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new HttpResponse<>("Role USER no configurado"));
+        }
+
+        User u = new User();
+        u.setFirstName(req.getFirstName());
+        u.setLastName1(req.getLastName1());
+        u.setLastName2(req.getLastName2());
+        u.setBirthDate(req.getBirthDate());
+        u.setEmail(req.getEmail());
+        u.setPhone(req.getPhone());
+        u.setArtLevel(ArtLevel.fromString(req.getArtLevel()));
+        u.setPassword(passwordEncoder.encode(req.getPassword()));
+        u.setRole(optionalRole.get());
+
+        User saved = userRepository.save(u);
+
+        // Respuesta de éxito según tu criterio de aceptación
+        HttpResponse<User> response = new HttpResponse<>(
+                "Cuenta creada correctamente. Bienvenido a MuseAI", saved);
+        return ResponseEntity.ok(response);
     }
 
 }
