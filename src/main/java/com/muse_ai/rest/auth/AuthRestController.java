@@ -9,6 +9,7 @@ import com.muse_ai.logic.entity.user.LoginResponse;
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
 import com.muse_ai.rest.auth.dto.RegisterRequest;
+import com.muse_ai.rest.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,18 +53,15 @@ public class AuthRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody User user) {
-        User authenticatedUser = authenticationService.authenticate(user);
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest req) {
+        User authenticatedUser = authenticationService.authenticate(req.email(), req.password());
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
-
-        Optional<User> foundedUser = userRepository.findByEmail(user.getEmail());
-
-        foundedUser.ifPresent(loginResponse::setAuthUser);
+        loginResponse.setAuthUser(authenticatedUser);
 
         return ResponseEntity.ok(loginResponse);
     }
