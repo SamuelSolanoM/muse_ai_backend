@@ -1,4 +1,4 @@
-package com.muse_ai.rest.dto;
+package com.muse_ai.rest.auth.dto;
 
 
 

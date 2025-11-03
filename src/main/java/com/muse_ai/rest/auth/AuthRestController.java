@@ -2,14 +2,17 @@ package com.muse_ai.rest.auth;
 
 import com.muse_ai.logic.entity.auth.AuthenticationService;
 import com.muse_ai.logic.entity.auth.JwtService;
+import com.muse_ai.logic.entity.auth.PasswordRecoveryService;
 import com.muse_ai.logic.entity.rol.Role;
 import com.muse_ai.logic.entity.rol.RoleEnum;
 import com.muse_ai.logic.entity.rol.RoleRepository;
 import com.muse_ai.logic.entity.user.LoginResponse;
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
+import com.muse_ai.rest.auth.dto.PasswordRecoveryRequest;
+import com.muse_ai.rest.auth.dto.PasswordResetRequest;
 import com.muse_ai.rest.auth.dto.RegisterRequest;
-import com.muse_ai.rest.dto.LoginRequest;
+import com.muse_ai.rest.auth.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +27,6 @@ import com.muse_ai.logic.entity.user.ArtLevel;
 import com.muse_ai.logic.entity.http.HttpResponse;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -46,10 +48,13 @@ public class AuthRestController {
 
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
+    private final PasswordRecoveryService passwordRecoveryService;
 
-    public AuthRestController(JwtService jwtService, AuthenticationService authenticationService) {
+    public AuthRestController(JwtService jwtService, AuthenticationService authenticationService,
+                              PasswordRecoveryService passwordRecoveryService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.passwordRecoveryService = passwordRecoveryService;
     }
 
     @PostMapping("/login")
@@ -64,6 +69,20 @@ public class AuthRestController {
         loginResponse.setAuthUser(authenticatedUser);
 
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/password/recovery")
+    public ResponseEntity<HttpResponse<Void>> requestPasswordRecovery(@Valid @RequestBody PasswordRecoveryRequest req) {
+        passwordRecoveryService.requestReset(req.getEmail());
+        HttpResponse<Void> response = new HttpResponse<>("Si el correo existe, se enviará un código de verificación");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/password/reset")
+    public ResponseEntity<HttpResponse<Void>> resetPassword(@Valid @RequestBody PasswordResetRequest req) {
+        passwordRecoveryService.resetPassword(req.getEmail(), req.getCode(), req.getNewPassword());
+        HttpResponse<Void> response = new HttpResponse<>("Contraseña actualizada correctamente");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup")
