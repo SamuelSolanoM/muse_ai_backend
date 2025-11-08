@@ -1,18 +1,18 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.project'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+    sourceCompatibility = '21'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
@@ -43,12 +43,12 @@ dependencies {
 }
 
 bootJar {
-	archiveBaseName.set('demo-java-spring-api')
-	archiveVersion.set('1.0.0')
-	archiveFileName.set('demo-java-spring-api-1.0.0.jar')
-	launchScript()
+    archiveBaseName.set('demo-java-spring-api')
+    archiveVersion.set('1.0.0')
+    archiveFileName.set('demo-java-spring-api-1.0.0.jar')
+    launchScript()
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

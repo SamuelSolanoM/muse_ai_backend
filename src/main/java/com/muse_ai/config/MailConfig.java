@@ -1,25 +1,54 @@
 package com.muse_ai.config;
 
+import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import jakarta.mail.internet.MimeMessage;
+import java.util.Properties;
 
 /**
  * Configuración de respaldo para JavaMailSender
  * Evita errores si no se define un bean de correo.
  */
 @Configuration
+@EnableConfigurationProperties(MailProperties.class)
 public class MailConfig {
 
     @Bean
-    @ConditionalOnMissingBean(JavaMailSender.class)
+    @ConditionalOnProperty(name = "app.mail.enabled", havingValue = "true", matchIfMissing = true)
+    public JavaMailSender javaMailSender(MailProperties mailProperties) {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost(mailProperties.getHost());
+        if (mailProperties.getPort() != null) {
+            sender.setPort(mailProperties.getPort());
+        }
+        sender.setUsername(mailProperties.getUsername());
+        sender.setPassword(mailProperties.getPassword());
+        sender.setProtocol(mailProperties.getProtocol());
+
+        if (mailProperties.getProperties() != null && !mailProperties.getProperties().isEmpty()) {
+            Properties javaMailProps = new Properties();
+            javaMailProps.putAll(mailProperties.getProperties());
+            sender.setJavaMailProperties(javaMailProps);
+        }
+
+        if (mailProperties.getDefaultEncoding() != null) {
+            sender.setDefaultEncoding(mailProperties.getDefaultEncoding().name());
+        }
+        return sender;
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.mail.enabled", havingValue = "false")
     public JavaMailSender fallbackMailSender() {
         return new NoOpMailSender();
     }
