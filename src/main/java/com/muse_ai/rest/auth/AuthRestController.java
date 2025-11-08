@@ -1,6 +1,7 @@
 package com.muse_ai.rest.auth;
 
 import com.muse_ai.logic.entity.auth.AuthenticationService;
+import com.muse_ai.logic.entity.auth.GoogleTokenVerifier;
 import com.muse_ai.logic.entity.auth.JwtService;
 import com.muse_ai.logic.entity.auth.PasswordRecoveryService;
 import com.muse_ai.logic.entity.rol.Role;
@@ -9,18 +10,12 @@ import com.muse_ai.logic.entity.rol.RoleRepository;
 import com.muse_ai.logic.entity.user.LoginResponse;
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
-import com.muse_ai.rest.auth.dto.PasswordRecoveryRequest;
-import com.muse_ai.rest.auth.dto.PasswordResetRequest;
-import com.muse_ai.rest.auth.dto.RegisterRequest;
-import com.muse_ai.rest.auth.dto.LoginRequest;
+import com.muse_ai.rest.auth.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import com.muse_ai.logic.entity.user.ArtLevel;
@@ -29,7 +24,7 @@ import com.muse_ai.logic.entity.http.HttpResponse;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/auth")
 @RestController
 public class AuthRestController {
@@ -46,15 +41,18 @@ public class AuthRestController {
 
 
 
+
+
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     private final PasswordRecoveryService passwordRecoveryService;
+    private final GoogleTokenVerifier googleTokenVerifier;
 
-    public AuthRestController(JwtService jwtService, AuthenticationService authenticationService,
-                              PasswordRecoveryService passwordRecoveryService) {
+    public AuthRestController(JwtService jwtService, AuthenticationService authenticationService, PasswordRecoveryService passwordRecoveryService, GoogleTokenVerifier googleTokenVerifier) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.passwordRecoveryService = passwordRecoveryService;
+        this.googleTokenVerifier = googleTokenVerifier;
     }
 
     @PostMapping("/login")
@@ -134,5 +132,46 @@ public class AuthRestController {
                 "Cuenta creada correctamente. Bienvenido a MuseAI", saved);
         return ResponseEntity.ok(response);
     }
+
+
+
+    @PostMapping("/google")
+    public ResponseEntity<LoginResponse> googleSignIn(@RequestBody GoogleLoginRequest request) {
+
+        var payload = googleTokenVerifier.verify(request.getIdToken());
+        String email = payload.getEmail();
+        String firstName = (String) payload.get("given_name");
+        String lastName1 = (String) payload.get("family_name");
+        String picture = (String) payload.get("picture");
+
+
+        User user = userRepository.findByEmail(email).orElseGet(() -> {
+            User u = new User();
+            u.setFirstName(firstName != null ? firstName : "Usuario");
+            u.setLastName1(lastName1 != null ? lastName1 : "");
+            u.setLastName2("");
+            u.setEmail(email);
+            u.setPassword(passwordEncoder.encode(java.util.UUID.randomUUID().toString()));
+            u.setPhone("");
+            u.setArtLevel(com.muse_ai.logic.entity.user.ArtLevel.BEGINNER); // valor por defecto
+            u.setBirthDate(java.time.LocalDate.of(2000, 1, 1)); // placeholder
+            Role role = roleRepository.findByName(RoleEnum.USER)
+                    .orElseThrow(() -> new IllegalStateException("Role USER no encontrado"));
+            u.setRole(role);
+            return userRepository.save(u);
+        });
+
+
+        String jwtToken = jwtService.generateToken(user);
+
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(jwtToken);
+        response.setExpiresIn(jwtService.getExpirationTime());
+        response.setAuthUser(user);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }
