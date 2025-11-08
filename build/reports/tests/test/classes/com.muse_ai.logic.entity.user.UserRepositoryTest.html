@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - UserRepositoryTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>UserRepositoryTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.muse_ai.logic.entity.user.html">com.muse_ai.logic.entity.user</a> &gt; UserRepositoryTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.523s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+<li>
+<a href="#">Standard error</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">shouldFindUserByEmail()</td>
+<td class="success">0.523s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>09:48:34.026 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.muse_ai.logic.entity.user.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:48:34.144 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.muse_ai.DemoApplication for test class com.muse_ai.logic.entity.user.UserRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2025-11-07T09:48:34.499-06:00  INFO 20528 --- [demo] [    Test worker] c.m.l.entity.user.UserRepositoryTest     : Starting UserRepositoryTest using Java 21.0.2 with PID 20528 (started by XPC in C:\Users\XPC\Documents\2025\Proyecto de Ingenieria de Software 3\MuseAI\muse_ai_backend)
+2025-11-07T09:48:34.500-06:00  INFO 20528 --- [demo] [    Test worker] c.m.l.entity.user.UserRepositoryTest     : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-11-07T09:48:35.165-06:00  INFO 20528 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-07T09:48:35.224-06:00  INFO 20528 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 52 ms. Found 3 JPA repository interfaces.
+2025-11-07T09:48:35.742-06:00  INFO 20528 --- [demo] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-07T09:48:35.809-06:00  INFO 20528 --- [demo] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-11-07T09:48:35.860-06:00  INFO 20528 --- [demo] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-07T09:48:36.111-06:00  INFO 20528 --- [demo] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-07T09:48:36.146-06:00  INFO 20528 --- [demo] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-07T09:48:36.242-06:00  INFO 20528 --- [demo] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@5e541ef9
+2025-11-07T09:48:36.245-06:00  INFO 20528 --- [demo] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-07T09:48:36.277-06:00  WARN 20528 --- [demo] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-07T09:48:37.132-06:00  INFO 20528 --- [demo] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-07T09:48:37.181-06:00  INFO 20528 --- [demo] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-07T09:48:37.507-06:00  INFO 20528 --- [demo] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-07T09:48:38.015-06:00  WARN 20528 --- [demo] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-07T09:48:38.504-06:00  INFO 20528 --- [demo] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@597f9d91, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@64d128d0, org.springframework.security.web.context.SecurityContextHolderFilter@122e2306, org.springframework.security.web.header.HeaderWriterFilter@77fec3b6, org.springframework.web.filter.CorsFilter@6354a50a, org.springframework.security.web.authentication.logout.LogoutFilter@75b598a5, com.muse_ai.logic.entity.auth.JwtAuthenticationFilter@ab5af13, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@72548e3c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@24a024c8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4f755506, org.springframework.security.web.session.SessionManagementFilter@5cbf423b, org.springframework.security.web.access.ExceptionTranslationFilter@3bca3dee, org.springframework.security.web.access.intercept.AuthorizationFilter@70b9a553]
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@2339ad10
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@793937ec
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@2d260f2a
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 where u1_0.email=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.id=?
+2025-11-07T09:48:38.931-06:00  INFO 20528 --- [demo] [    Test worker] c.m.l.entity.user.UserRepositoryTest     : Started UserRepositoryTest in 4.643 seconds (process running for 5.773)
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 where u1_0.email=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.id=?
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at,u1_0.updated_at from `user` u1_0 join rol r1_0 on r1_0.id=u1_0.role_id where u1_0.id=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: insert into `user` (art_level,birth_date,created_at,email,first_name,last_name1,last_name2,password,phone,role_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 where u1_0.email=?
+</pre>
+</span>
+</div>
+<div class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>WARNING: A Java agent has been loaded dynamically (C:\Users\XPC\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.13\979ce25f7d3096a2e82214ba7dc972a05ce7a171\byte-buddy-agent-1.14.13.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14</a> at Nov 7, 2025, 9:48:39 AM</p>
+</div>
+</div>
+</body>
+</html>
