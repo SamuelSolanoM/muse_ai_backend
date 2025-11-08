@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "user",
+@Table(name = "`user`",
         uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 @Entity
 public class User implements UserDetails {
