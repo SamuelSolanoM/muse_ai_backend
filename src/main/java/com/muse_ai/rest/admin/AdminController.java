@@ -3,6 +3,7 @@ package com.muse_ai.rest.admin;
 import com.muse_ai.logic.entity.rol.Role;
 import com.muse_ai.logic.entity.rol.RoleEnum;
 import com.muse_ai.logic.entity.rol.RoleRepository;
+import com.muse_ai.logic.entity.user.ArtLevel;
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RequestMapping("/admin")
@@ -37,9 +39,19 @@ public class AdminController {
             return null;
         }
 
-        var user = new User();
-        user.setName(newAdminUser.getName());
+        User user = new User();
+        // Usa los campos nuevos; si tu payload trae "name/lastname", mapea antes o usa DTO
+        user.setFirstName(newAdminUser.getFirstName());
+        user.setLastName1(newAdminUser.getLastName1());
+        user.setLastName2(newAdminUser.getLastName2());
         user.setEmail(newAdminUser.getEmail());
+        user.setPhone(newAdminUser.getPhone());
+        user.setBirthDate(
+                newAdminUser.getBirthDate() != null ? newAdminUser.getBirthDate() : LocalDate.of(1990,1,1)
+        );
+        user.setArtLevel(
+                newAdminUser.getArtLevel() != null ? newAdminUser.getArtLevel() : ArtLevel.ADVANCED
+        );
         user.setPassword(passwordEncoder.encode(newAdminUser.getPassword()));
         user.setRole(optionalRole.get());
 

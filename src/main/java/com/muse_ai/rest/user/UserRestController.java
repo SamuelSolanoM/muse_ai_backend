@@ -29,7 +29,7 @@ public class UserRestController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -48,32 +48,47 @@ public class UserRestController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> addUser(@RequestBody User user, HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return new GlobalResponseHandler().handleResponse("User updated successfully",
+        return new GlobalResponseHandler().handleResponse("User created successfully",
                 user, HttpStatus.OK, request);
     }
 
     @PutMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
-        Optional<User> foundOrder = userRepository.findById(userId);
-        if(foundOrder.isPresent()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Optional<User> foundUser = userRepository.findById(userId);
+
+        if (foundUser.isPresent()) {
+            User existingUser = foundUser.get();
+            user.setRole(existingUser.getRole());
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            } else {
+                user.setPassword(existingUser.getPassword());
+            }
+            user.setId(userId);
             userRepository.save(user);
-            return new GlobalResponseHandler().handleResponse("User updated successfully",
-                    user, HttpStatus.OK, request);
+            return new GlobalResponseHandler().handleResponse(
+                    "User updated successfully",
+                    user,
+                    HttpStatus.OK,
+                    request
+            );
         } else {
-            return new GlobalResponseHandler().handleResponse("User id " + userId + " not found"  ,
-                    HttpStatus.NOT_FOUND, request);
+            return new GlobalResponseHandler().handleResponse(
+                    "User id " + userId + " not found",
+                    HttpStatus.NOT_FOUND,
+                    request
+            );
         }
     }
 
 
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId, HttpServletRequest request) {
         Optional<User> foundOrder = userRepository.findById(userId);
         if(foundOrder.isPresent()) {

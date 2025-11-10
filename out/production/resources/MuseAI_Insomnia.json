@@ -1,0 +1,110 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-10-29T20:00:00.000Z",
+  "__export_source": "MuseAI Chat Assistant",
+  "resources": [
+    {
+      "_id": "wrk_museai",
+      "_type": "workspace",
+      "name": "MuseAI API",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_museai_base",
+      "_type": "environment",
+      "parentId": "wrk_museai",
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "http://localhost:8080",
+        "jwt": ""
+      }
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_museai",
+      "name": "Auth"
+    },
+    {
+      "_id": "req_auth_register",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Register (POST /auth/register)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"firstName\": \"Jimena\",\n  \"lastName1\": \"Araya\",\n  \"lastName2\": \"Reyes\",\n  \"birthDate\": \"2002-01-15\",\n  \"email\": \"jime.register@test.com\",\n  \"phone\": \"+50688888888\",\n  \"password\": \"MuseAI2025\",\n  \"artLevel\": \"ADVANCED\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_auth_login",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login (POST /auth/login)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"jime.register@test.com\",\n  \"password\": \"MuseAI2025\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "fld_users",
+      "_type": "request_group",
+      "parentId": "wrk_museai",
+      "name": "Users"
+    },
+    {
+      "_id": "req_users_list",
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "List Users (GET /users)",
+      "method": "GET",
+      "url": "{{ _.baseUrl }}/users",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.jwt }}" }
+      ]
+    },
+    {
+      "_id": "req_users_me",
+      "_type": "request",
+      "parentId": "fld_users",
+      "name": "Me (GET /users/me)",
+      "method": "GET",
+      "url": "{{ _.baseUrl }}/users/me",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.jwt }}" }
+      ]
+    },
+    {
+      "_id": "fld_admin",
+      "_type": "request_group",
+      "parentId": "wrk_museai",
+      "name": "Admin"
+    },
+    {
+      "_id": "req_admin_create",
+      "_type": "request",
+      "parentId": "fld_admin",
+      "name": "Create Admin (POST /admin) [SUPER_ADMIN]",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/admin",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"firstName\": \"Alice\",\n  \"lastName1\": \"Manager\",\n  \"email\": \"alice.admin@test.com\",\n  \"password\": \"Admin2025!\",\n  \"birthDate\": \"1990-01-01\",\n  \"artLevel\": \"ADVANCED\"\n}"
+      },
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ _.jwt }}" }
+      ]
+    }
+  ]
+}
