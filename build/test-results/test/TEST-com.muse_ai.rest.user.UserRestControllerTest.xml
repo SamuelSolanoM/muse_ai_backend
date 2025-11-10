@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.muse_ai.rest.user.UserRestControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-11-10T02:55:05.862Z" hostname="DESKTOP-MIBN9S6" time="0.253">
+  <properties/>
+  <testcase name="shouldDeleteUserSuccessfully()" classname="com.muse_ai.rest.user.UserRestControllerTest" time="0.165"/>
+  <testcase name="shouldRetrieveAllUsersSuccessfully()" classname="com.muse_ai.rest.user.UserRestControllerTest" time="0.086"/>
+  <system-out><![CDATA[2025-11-09T20:55:05.848-06:00  INFO 24668 --- [demo] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.muse_ai.rest.user.UserRestControllerTest]: UserRestControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-09T20:55:05.859-06:00  INFO 24668 --- [demo] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.muse_ai.DemoApplication for test class com.muse_ai.rest.user.UserRestControllerTest
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: insert into `user` (art_level,birth_date,created_at,email,first_name,last_name1,last_name2,password,phone,role_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: insert into `user` (art_level,birth_date,created_at,email,first_name,last_name1,last_name2,password,phone,role_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: insert into `user` (art_level,birth_date,created_at,email,first_name,last_name1,last_name2,password,phone,role_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 limit ?,?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.id=?
+Hibernate: select count(u1_0.id) from `user` u1_0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

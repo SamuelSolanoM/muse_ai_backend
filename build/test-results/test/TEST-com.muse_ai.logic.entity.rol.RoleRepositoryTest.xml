@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.muse_ai.logic.entity.rol.RoleRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-10T02:55:03.229Z" hostname="DESKTOP-MIBN9S6" time="0.512">
+  <properties/>
+  <testcase name="shouldFindUserRoleByName()" classname="com.muse_ai.logic.entity.rol.RoleRepositoryTest" time="0.497"/>
+  <testcase name="shouldThrowExceptionWhenInvalidEnumValueIsUsed()" classname="com.muse_ai.logic.entity.rol.RoleRepositoryTest" time="0.007"/>
+  <testcase name="shouldFindAdminRoleByName()" classname="com.muse_ai.logic.entity.rol.RoleRepositoryTest" time="0.006"/>
+  <system-out><![CDATA[20:54:58.140 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.muse_ai.logic.entity.rol.RoleRepositoryTest]: RoleRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:54:58.256 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.muse_ai.DemoApplication for test class com.muse_ai.logic.entity.rol.RoleRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2025-11-09T20:54:58.621-06:00  INFO 24668 --- [demo] [    Test worker] c.m.logic.entity.rol.RoleRepositoryTest  : Starting RoleRepositoryTest using Java 21.0.2 with PID 24668 (started by XPC in C:\Users\XPC\Documents\2025\Proyecto de Ingenieria de Software 3\MuseAI\muse_ai_backend)
+2025-11-09T20:54:58.623-06:00  INFO 24668 --- [demo] [    Test worker] c.m.logic.entity.rol.RoleRepositoryTest  : No active profile set, falling back to 1 default profile: "default"
+2025-11-09T20:54:59.287-06:00  INFO 24668 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-09T20:54:59.348-06:00  INFO 24668 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53 ms. Found 3 JPA repository interfaces.
+2025-11-09T20:54:59.884-06:00  INFO 24668 --- [demo] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-09T20:54:59.953-06:00  INFO 24668 --- [demo] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-11-09T20:55:00.003-06:00  INFO 24668 --- [demo] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-09T20:55:00.239-06:00  INFO 24668 --- [demo] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-09T20:55:00.271-06:00  INFO 24668 --- [demo] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-09T20:55:00.365-06:00  INFO 24668 --- [demo] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@46a388cc
+2025-11-09T20:55:00.367-06:00  INFO 24668 --- [demo] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-09T20:55:00.393-06:00  WARN 24668 --- [demo] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MariaDBDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-09T20:55:01.258-06:00  INFO 24668 --- [demo] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-09T20:55:01.304-06:00  INFO 24668 --- [demo] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-09T20:55:01.630-06:00  INFO 24668 --- [demo] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-09T20:55:02.118-06:00  WARN 24668 --- [demo] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-09T20:55:02.636-06:00  INFO 24668 --- [demo] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4df3b838, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3821a012, org.springframework.security.web.context.SecurityContextHolderFilter@1eaf95d2, org.springframework.security.web.header.HeaderWriterFilter@6eb06667, org.springframework.web.filter.CorsFilter@4b95fdf2, org.springframework.security.web.authentication.logout.LogoutFilter@74ed11d7, com.muse_ai.logic.entity.auth.JwtAuthenticationFilter@4420f4d4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d59ad49, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@78a03662, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2efda33d, org.springframework.security.web.session.SessionManagementFilter@5319f536, org.springframework.security.web.access.ExceptionTranslationFilter@5b51a4c7, org.springframework.security.web.access.intercept.AuthorizationFilter@4096a622]
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@65b51977
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@41e5038a
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+com.muse_ai.logic.entity.rol.Role@46e05384
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 where u1_0.email=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.id=?
+2025-11-09T20:55:03.106-06:00  INFO 24668 --- [demo] [    Test worker] c.m.logic.entity.rol.RoleRepositoryTest  : Started RoleRepositoryTest in 4.702 seconds (process running for 5.901)
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,u1_0.updated_at from `user` u1_0 where u1_0.email=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.id=?
+Hibernate: select u1_0.id,u1_0.art_level,u1_0.birth_date,u1_0.created_at,u1_0.email,u1_0.first_name,u1_0.last_name1,u1_0.last_name2,u1_0.password,u1_0.phone,u1_0.role_id,r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at,u1_0.updated_at from `user` u1_0 join rol r1_0 on r1_0.id=u1_0.role_id where u1_0.id=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+Hibernate: select r1_0.id,r1_0.created_at,r1_0.description,r1_0.name,r1_0.updated_at from rol r1_0 where r1_0.name=?
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\XPC\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.13\979ce25f7d3096a2e82214ba7dc972a05ce7a171\byte-buddy-agent-1.14.13.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
