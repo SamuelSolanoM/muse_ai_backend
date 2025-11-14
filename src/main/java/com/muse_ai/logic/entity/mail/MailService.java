@@ -43,15 +43,17 @@ public class MailService {
         return """
                 Hola,
 
-                Hemos recibido una solicitud para restablecer tu contraseña en MuseAI.
-                Usa el siguiente código para completar el proceso:
+                Recibimos una solicitud para restablecer tu contraseña en MuseAI.
+                Ingresa el siguiente código para continuar con seguridad:
 
+                --------------------
                 Código: %s
+                --------------------
 
-                Si no solicitaste este cambio, puedes ignorar este correo.
+                El código vence en unos minutos. Si no fuiste tú, ignora este mensaje o contáctanos para ayudarte.
 
+                Gracias por usar MuseAI,
                 Equipo MuseAI
                 """.formatted(code);
     }
 }
-
