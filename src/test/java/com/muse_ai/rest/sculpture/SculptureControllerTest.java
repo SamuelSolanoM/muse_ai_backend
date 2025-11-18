@@ -47,6 +47,7 @@ class SculptureControllerTest {
                 "Test Sculpture",
                 "{\"hello\":true}",
                 "{\"units\":\"cm\"}",
+                "A new masterpiece",
                 List.of("angular", "scene"),
                 null
         );
@@ -56,6 +57,7 @@ class SculptureControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Test Sculpture"))
+                .andExpect(jsonPath("$.description").value("A new masterpiece"))
                 .andExpect(jsonPath("$.tags").isArray())
                 .andExpect(jsonPath("$.sceneJson").value("{\"hello\":true}"));
     }
@@ -74,6 +76,7 @@ class SculptureControllerTest {
                 "Huge Scene",
                 hugeValue,
                 "{\"units\":\"cm\"}",
+                null,
                 List.of("huge"),
                 null
         );
@@ -93,6 +96,7 @@ class SculptureControllerTest {
         tagged.setSceneJson("{\"foo\":1}");
         tagged.setTags(List.of("featured"));
         tagged.setSlug("tagged-slug");
+        tagged.setDescription("Description A");
 
         Sculpture other = new Sculpture();
         other.setName("Other");
@@ -100,6 +104,7 @@ class SculptureControllerTest {
         other.setSceneJson("{\"foo\":2}");
         other.setTags(List.of("backlog"));
         other.setSlug("other-slug");
+        other.setDescription("");
 
         sculptureRepository.saveAll(List.of(tagged, other));
 
@@ -118,6 +123,7 @@ class SculptureControllerTest {
         sculpture.setSceneJson("{\"foo\":3}");
         sculpture.setTags(List.of("shared"));
         sculpture.setSlug("shared-slug");
+        sculpture.setDescription("Shared desc");
         sculptureRepository.save(sculpture);
 
         mockMvc.perform(get("/api/sculptures/slug/{slug}", "shared-slug"))
@@ -135,12 +141,14 @@ class SculptureControllerTest {
         sculpture.setSceneJson("{\"foo\":4}");
         sculpture.setTags(List.of("draft"));
         sculpture.setSlug("mutable-slug");
+        sculpture.setDescription("Original description");
         sculpture = sculptureRepository.save(sculpture);
 
         SculptureRequest update = new SculptureRequest(
                 "Mutable Updated",
                 "{\"foo\":5}",
                 "{\"units\":\"m\"}",
+                "Updated description",
                 List.of("draft", "ready"),
                 "mutable-custom"
         );
@@ -150,6 +158,7 @@ class SculptureControllerTest {
                         .content(objectMapper.writeValueAsString(update)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Mutable Updated"))
+                .andExpect(jsonPath("$.description").value("Updated description"))
                 .andExpect(jsonPath("$.slug").value("mutable-custom"));
 
         mockMvc.perform(delete("/api/sculptures/{id}", sculpture.getId()))

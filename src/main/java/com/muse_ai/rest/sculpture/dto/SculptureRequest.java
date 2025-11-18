@@ -15,6 +15,8 @@ public record SculptureRequest(
         @NotBlank(message = "metadata is required")
         String metadata,
 
+        String description,
+
         @Size(max = 25, message = "A sculpture can only have up to 25 tags")
         List<@NotBlank(message = "Tags cannot contain blank values") String> tags,
 

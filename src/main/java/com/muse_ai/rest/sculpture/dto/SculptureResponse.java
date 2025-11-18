@@ -9,6 +9,7 @@ import java.util.UUID;
 public record SculptureResponse(
         UUID id,
         String name,
+        String description,
         String slug,
         List<String> tags,
         String metadata,
@@ -21,6 +22,7 @@ public record SculptureResponse(
         return new SculptureResponse(
                 sculpture.getId(),
                 sculpture.getName(),
+                defaultDescription(sculpture.getDescription()),
                 sculpture.getSlug(),
                 List.copyOf(sculpture.getTags()),
                 sculpture.getMetadata(),
@@ -28,5 +30,9 @@ public record SculptureResponse(
                 sculpture.getCreatedAt(),
                 sculpture.getUpdatedAt()
         );
+    }
+
+    private static String defaultDescription(String description) {
+        return description == null ? "" : description;
     }
 }
