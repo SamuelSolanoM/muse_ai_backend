@@ -41,8 +41,6 @@ public class AuthRestController {
 
 
 
-
-
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     private final PasswordRecoveryService passwordRecoveryService;

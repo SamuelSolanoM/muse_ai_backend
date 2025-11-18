@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers("/api/paintings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/sculptures/slug/**").permitAll()
                         .anyRequest().authenticated()
                 )
