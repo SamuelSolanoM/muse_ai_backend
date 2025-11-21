@@ -1,5 +1,6 @@
 package com.muse_ai.rest.sculpture.dto;
 
+import com.muse_ai.rest.sculpture.validation.ValidSceneJsonSize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -10,6 +11,7 @@ public record SculptureRequest(
         String name,
 
         @NotBlank(message = "sceneJson is required")
+        @ValidSceneJsonSize
         String sceneJson,
 
         @NotBlank(message = "metadata is required")

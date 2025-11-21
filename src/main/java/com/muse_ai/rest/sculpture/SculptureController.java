@@ -9,7 +9,6 @@ import com.muse_ai.rest.sculpture.dto.SculptureResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,10 +27,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/sculptures")
 @CrossOrigin(origins = {"${app.frontend.origin:http://localhost:4200}"})
-@Validated
 public class SculptureController {
 
-    private static final int MAX_SCENE_BYTES = 5 * 1024 * 1024;
     private final SculptureService sculptureService;
 
     public SculptureController(SculptureService sculptureService) {
@@ -42,7 +37,6 @@ public class SculptureController {
 
     @PostMapping
     public ResponseEntity<SculptureResponse> create(@Valid @RequestBody SculptureRequest request) {
-        validateScenePayloadSize(request.sceneJson());
         Sculpture sculpture = sculptureService.create(toCommand(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(SculptureResponse.from(sculpture));
     }
@@ -50,7 +44,6 @@ public class SculptureController {
     @PutMapping("/{id}")
     public ResponseEntity<SculptureResponse> update(@PathVariable UUID id,
                                                     @Valid @RequestBody SculptureRequest request) {
-        validateScenePayloadSize(request.sceneJson());
         Sculpture sculpture = sculptureService.update(id, toCommand(request));
         return ResponseEntity.ok(SculptureResponse.from(sculpture));
     }
@@ -92,18 +85,5 @@ public class SculptureController {
                 request.slug(),
                 request.description()
         );
-    }
-
-    private void validateScenePayloadSize(String sceneJson) {
-        if (sceneJson == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "sceneJson is required");
-        }
-        int bytes = sceneJson.getBytes(StandardCharsets.UTF_8).length;
-        if (bytes > MAX_SCENE_BYTES) {
-            throw new ResponseStatusException(
-                    HttpStatus.PAYLOAD_TOO_LARGE,
-                    "sceneJson exceeds the 5 MB limit (" + bytes + " bytes provided)"
-            );
-        }
     }
 }
