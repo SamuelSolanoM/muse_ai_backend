@@ -1,5 +1,6 @@
 package com.muse_ai.rest.painting.dto;
 
+import com.muse_ai.rest.common.validation.ValidSceneJsonSize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -10,6 +11,7 @@ public record PaintingRequest(
         String name,
 
         @NotBlank(message = "sceneJson is required")
+        @ValidSceneJsonSize
         String sceneJson,
 
         @NotBlank(message = "metadata is required")
@@ -20,5 +22,4 @@ public record PaintingRequest(
 
         @Size(max = 140, message = "Slug cannot exceed 140 characters")
         String slug
-) {
-}
+) { }
