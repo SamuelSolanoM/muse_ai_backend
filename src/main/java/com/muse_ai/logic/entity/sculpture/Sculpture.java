@@ -37,6 +37,9 @@ public class Sculpture {
     @Column(name = "tag", length = 60)
     private List<String> tags = new ArrayList<>();
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Lob
     @Column(name = "scene_json", nullable = false, columnDefinition = "TEXT")
     private String sceneJson;
@@ -83,6 +86,14 @@ public class Sculpture {
 
     public void setTags(List<String> tags) {
         this.tags = tags == null ? new ArrayList<>() : new ArrayList<>(tags);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getSceneJson() {

@@ -74,6 +74,7 @@ public class SculptureService {
         sculpture.setMetadata(defaultMetadata(command.metadata()));
         sculpture.setSceneJson(command.sceneJson());
         sculpture.setTags(sanitizeTags(command.tags()));
+        sculpture.setDescription(resolveDescription(command.description(), sculpture.getDescription()));
     }
 
     private List<String> sanitizeTags(List<String> tags) {
@@ -91,6 +92,13 @@ public class SculptureService {
 
     private String defaultMetadata(String metadata) {
         return StringUtils.hasText(metadata) ? metadata : "{}";
+    }
+
+    private String resolveDescription(String requested, String existing) {
+        if (requested == null) {
+            return existing == null ? "" : existing;
+        }
+        return requested;
     }
 
     private String resolveSlug(String requestedSlug, String fallbackName, UUID currentId) {

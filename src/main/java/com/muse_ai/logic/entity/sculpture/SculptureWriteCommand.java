@@ -7,6 +7,7 @@ public record SculptureWriteCommand(
         String metadata,
         String sceneJson,
         List<String> tags,
-        String slug
+        String slug,
+        String description
 ) {
 }

@@ -89,7 +89,8 @@ public class SculptureController {
                 request.metadata(),
                 request.sceneJson(),
                 request.tags(),
-                request.slug()
+                request.slug(),
+                request.description()
         );
     }
 
