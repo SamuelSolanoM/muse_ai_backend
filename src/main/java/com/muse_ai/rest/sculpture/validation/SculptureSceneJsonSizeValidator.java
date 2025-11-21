@@ -9,13 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @Component
-public class SceneJsonSizeValidator implements ConstraintValidator<ValidSceneJsonSize, String> {
+public class SculptureSceneJsonSizeValidator implements ConstraintValidator<ValidSceneJsonSize, String> {
 
     private static final double BYTES_PER_MEGABYTE = 1024d * 1024d;
 
     private final int maxBytes;
 
-    public SceneJsonSizeValidator(@Value("${app.sculpture.max-scene-bytes:5242880}") int maxBytes) {
+    public SculptureSceneJsonSizeValidator(@Value("${app.sculpture.max-scene-bytes:5242880}") int maxBytes) {
         this.maxBytes = maxBytes;
     }
 
