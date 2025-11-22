@@ -1,12 +1,12 @@
-package com.muse_ai.rest.sculpture.dto;
+package com.muse_ai.rest.painting.dto;
 
-import com.muse_ai.rest.sculpture.validation.ValidSceneJsonSize;
+import com.muse_ai.rest.common.validation.ValidSceneJsonSize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record SculptureRequest(
+public record PaintingRequest(
         @NotBlank(message = "Name is required")
         String name,
 
@@ -17,12 +17,9 @@ public record SculptureRequest(
         @NotBlank(message = "metadata is required")
         String metadata,
 
-        String description,
-
-        @Size(max = 25, message = "A sculpture can only have up to 25 tags")
+        @Size(max = 25, message = "A painting can only have up to 25 tags")
         List<@NotBlank(message = "Tags cannot contain blank values") String> tags,
 
         @Size(max = 140, message = "Slug cannot exceed 140 characters")
         String slug
-) {
-}
+) { }

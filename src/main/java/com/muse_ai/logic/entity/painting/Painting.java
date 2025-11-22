@@ -1,4 +1,4 @@
-package com.muse_ai.logic.entity.sculpture;
+package com.muse_ai.logic.entity.painting;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "sculpture")
-public class Sculpture {
+@Table(name = "painting")
+public class Painting {
 
     @Id
     @GeneratedValue
@@ -33,12 +33,9 @@ public class Sculpture {
     private String slug;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "sculpture_tags", joinColumns = @JoinColumn(name = "sculpture_id"))
+    @CollectionTable(name = "painting_tags", joinColumns = @JoinColumn(name = "painting_id"))
     @Column(name = "tag", length = 60)
     private List<String> tags = new ArrayList<>();
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
 
     @Lob
     @Column(name = "scene_json", nullable = false, columnDefinition = "TEXT")
@@ -55,6 +52,8 @@ public class Sculpture {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    // ───── Getters / setters ─────
 
     public UUID getId() {
         return id;
@@ -86,14 +85,6 @@ public class Sculpture {
 
     public void setTags(List<String> tags) {
         this.tags = tags == null ? new ArrayList<>() : new ArrayList<>(tags);
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getSceneJson() {

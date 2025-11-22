@@ -22,6 +22,7 @@ class SculptureRepositoryTest {
         sculpture.setSceneJson("{\"foo\":\"bar\"}");
         sculpture.setTags(List.of("organic", "wip"));
         sculpture.setSlug("repository-sample");
+        sculpture.setDescription("Repository level description");
 
         Sculpture saved = sculptureRepository.save(sculpture);
 
@@ -38,6 +39,7 @@ class SculptureRepositoryTest {
         matching.setSceneJson("{\"foo\":1}");
         matching.setTags(List.of("Hologram"));
         matching.setSlug("match-slug");
+        matching.setDescription("");
 
         Sculpture other = new Sculpture();
         other.setName("Other");
@@ -45,6 +47,7 @@ class SculptureRepositoryTest {
         other.setSceneJson("{\"foo\":2}");
         other.setTags(List.of("Portrait"));
         other.setSlug("other-slug");
+        other.setDescription("");
 
         sculptureRepository.saveAll(List.of(matching, other));
 
