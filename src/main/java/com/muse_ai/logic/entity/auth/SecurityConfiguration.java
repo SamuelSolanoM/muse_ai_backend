@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/paintings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/sculptures/slug/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/cma/**").permitAll() // ✅ aquí está el cambio
-                        .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
