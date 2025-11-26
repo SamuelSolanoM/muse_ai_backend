@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers("/api/paintings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/sculptures/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/sculptures/slug/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/cma/**").permitAll() // ✅ aquí está el cambio
                 .anyRequest().authenticated()
