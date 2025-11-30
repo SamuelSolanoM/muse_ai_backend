@@ -88,7 +88,7 @@ public class AiUsageTrackingService {
         StringBuilder builder = new StringBuilder();
         builder.append("Fecha,Modulo,Usuario,PromptTokens,CompletionTokens,TotalTokens\n");
         for (AiUsageSummary summary : report.details()) {
-            builder.append(summary.date()).append(',')
+            builder.append(summary.dateAsLocalDate()).append(',')
                     .append(summary.module()).append(',')
                     .append(safe(summary.userEmail())).append(',')
                     .append(summary.promptTokens() == null ? 0 : summary.promptTokens()).append(',')
@@ -123,7 +123,7 @@ public class AiUsageTrackingService {
             addHeaderCell(table, "Total tokens");
 
             for (AiUsageSummary summary : report.details()) {
-                table.addCell(value(String.valueOf(summary.date())));
+                table.addCell(value(String.valueOf(summary.dateAsLocalDate())));
                 table.addCell(value(moduleLabel(summary.module())));
                 table.addCell(value(safe(summary.userEmail())));
                 table.addCell(value(String.valueOf(summary.promptTokens() == null ? 0 : summary.promptTokens())));
