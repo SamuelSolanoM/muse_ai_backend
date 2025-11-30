@@ -1,5 +1,8 @@
 package com.muse_ai.logic.ai.translation;
 
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.usage.AiModule;
+import com.muse_ai.logic.ai.usage.AiUsageTrackingService;
 import com.muse_ai.rest.ai.dto.TranslationRequestDto;
 import com.muse_ai.rest.ai.dto.TranslationResponseDto;
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class DescriptionTranslationService {
@@ -26,9 +30,14 @@ public class DescriptionTranslationService {
 
     private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
     private final AiTranslationClient aiTranslationClient;
+    private final AiUsageTrackingService aiUsageTrackingService;
 
-    public DescriptionTranslationService(AiTranslationClient aiTranslationClient) {
+    public DescriptionTranslationService(
+            AiTranslationClient aiTranslationClient,
+            AiUsageTrackingService aiUsageTrackingService
+    ) {
         this.aiTranslationClient = aiTranslationClient;
+        this.aiUsageTrackingService = aiUsageTrackingService;
     }
 
     public TranslationResponseDto translate(TranslationRequestDto request) {
@@ -50,12 +59,17 @@ public class DescriptionTranslationService {
 
         String cacheKey = cacheKey(artworkId, targetLanguage, originalText);
         AtomicBoolean servedFromCache = new AtomicBoolean(true);
+        AtomicReference<AiResponse> aiResponse = new AtomicReference<>();
         String translation = cache.computeIfAbsent(cacheKey, key -> {
             servedFromCache.set(false);
-            return aiTranslationClient.translateDescription(originalText, sourceLanguage, targetLanguage);
+            AiResponse response = aiTranslationClient.translateDescription(originalText, sourceLanguage, targetLanguage);
+            aiResponse.set(response);
+            return response.content();
         });
         if (servedFromCache.get()) {
             log.debug("Returning cached translation for {}", cacheKey);
+        } else if (aiResponse.get() != null) {
+            aiUsageTrackingService.recordUsage(AiModule.TRANSLATION, aiResponse.get().model(), aiResponse.get().usage());
         }
         return new TranslationResponseDto(artworkId, targetLanguage, translation, servedFromCache.get());
     }

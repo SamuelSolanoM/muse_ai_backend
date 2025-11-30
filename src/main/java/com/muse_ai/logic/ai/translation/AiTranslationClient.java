@@ -1,6 +1,8 @@
 package com.muse_ai.logic.ai.translation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.AiUsageMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +38,7 @@ public class AiTranslationClient {
                 .build();
     }
 
-    public String translateDescription(String originalText, String sourceLanguage, String targetLanguage) {
+    public AiResponse translateDescription(String originalText, String sourceLanguage, String targetLanguage) {
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OpenAI API key is not configured");
         }
@@ -68,7 +70,8 @@ public class AiTranslationClient {
 
         String content = Optional.ofNullable(response.choices().getFirst().message().content())
                 .orElseThrow(() -> new IllegalStateException("OpenAI response did not include translated content"));
-        return content;
+        AiUsageMetrics usageMetrics = toUsage(response.usage());
+        return new AiResponse(content, usageMetrics, model);
     }
 
     private void logUsage(Usage usage) {
@@ -77,6 +80,17 @@ public class AiTranslationClient {
         }
         log.info("OpenAI translation tokens used - prompt: {}, completion: {}, total: {}",
                 usage.promptTokens(), usage.completionTokens(), usage.totalTokens());
+    }
+
+    private AiUsageMetrics toUsage(Usage usage) {
+        if (usage == null) {
+            return null;
+        }
+        return new AiUsageMetrics(
+                usage.promptTokens(),
+                usage.completionTokens(),
+                usage.totalTokens()
+        );
     }
 
     private String systemPrompt() {

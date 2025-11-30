@@ -1,5 +1,8 @@
 package com.muse_ai.logic.ai.description;
 
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.usage.AiModule;
+import com.muse_ai.logic.ai.usage.AiUsageTrackingService;
 import com.muse_ai.rest.ai.dto.SculptureDescriptionRequestDto;
 import com.muse_ai.rest.ai.dto.SculptureDescriptionResponseDto;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class SculptureDescriptionService {
@@ -27,9 +31,14 @@ public class SculptureDescriptionService {
 
     private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
     private final AiSculptureDescriptionClient aiSculptureDescriptionClient;
+    private final AiUsageTrackingService aiUsageTrackingService;
 
-    public SculptureDescriptionService(AiSculptureDescriptionClient aiSculptureDescriptionClient) {
+    public SculptureDescriptionService(
+            AiSculptureDescriptionClient aiSculptureDescriptionClient,
+            AiUsageTrackingService aiUsageTrackingService
+    ) {
         this.aiSculptureDescriptionClient = aiSculptureDescriptionClient;
+        this.aiUsageTrackingService = aiUsageTrackingService;
     }
 
     public SculptureDescriptionResponseDto describe(SculptureDescriptionRequestDto request) {
@@ -48,12 +57,17 @@ public class SculptureDescriptionService {
 
         String cacheKey = cacheKey(language, name, labels);
         AtomicBoolean servedFromCache = new AtomicBoolean(true);
+        AtomicReference<AiResponse> aiResponse = new AtomicReference<>();
         String description = cache.computeIfAbsent(cacheKey, key -> {
             servedFromCache.set(false);
-            return aiSculptureDescriptionClient.describeSculpture(name, labels, language);
+            AiResponse response = aiSculptureDescriptionClient.describeSculpture(name, labels, language);
+            aiResponse.set(response);
+            return response.content();
         });
         if (servedFromCache.get()) {
             log.debug("Returning cached sculpture description for {}", cacheKey);
+        } else if (aiResponse.get() != null) {
+            aiUsageTrackingService.recordUsage(AiModule.SCULPTURE_DESCRIPTION, aiResponse.get().model(), aiResponse.get().usage());
         }
         return new SculptureDescriptionResponseDto(language, name, labels, description, servedFromCache.get());
     }

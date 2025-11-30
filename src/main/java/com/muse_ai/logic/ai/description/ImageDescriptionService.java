@@ -1,5 +1,8 @@
 package com.muse_ai.logic.ai.description;
 
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.usage.AiModule;
+import com.muse_ai.logic.ai.usage.AiUsageTrackingService;
 import com.muse_ai.rest.ai.dto.ImageDescriptionRequestDto;
 import com.muse_ai.rest.ai.dto.ImageDescriptionResponseDto;
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class ImageDescriptionService {
@@ -26,9 +30,14 @@ public class ImageDescriptionService {
 
     private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
     private final AiImageDescriptionClient aiImageDescriptionClient;
+    private final AiUsageTrackingService aiUsageTrackingService;
 
-    public ImageDescriptionService(AiImageDescriptionClient aiImageDescriptionClient) {
+    public ImageDescriptionService(
+            AiImageDescriptionClient aiImageDescriptionClient,
+            AiUsageTrackingService aiUsageTrackingService
+    ) {
         this.aiImageDescriptionClient = aiImageDescriptionClient;
+        this.aiUsageTrackingService = aiUsageTrackingService;
     }
 
     public ImageDescriptionResponseDto describe(ImageDescriptionRequestDto request) {
@@ -43,12 +52,17 @@ public class ImageDescriptionService {
 
         String cacheKey = cacheKey(language, imageBase64);
         AtomicBoolean servedFromCache = new AtomicBoolean(true);
+        AtomicReference<AiResponse> aiResponse = new AtomicReference<>();
         String description = cache.computeIfAbsent(cacheKey, key -> {
             servedFromCache.set(false);
-            return aiImageDescriptionClient.describeImage(imageBase64, language);
+            AiResponse response = aiImageDescriptionClient.describeImage(imageBase64, language);
+            aiResponse.set(response);
+            return response.content();
         });
         if (servedFromCache.get()) {
             log.debug("Returning cached image description for {}", cacheKey);
+        } else if (aiResponse.get() != null) {
+            aiUsageTrackingService.recordUsage(AiModule.IMAGE_DESCRIPTION, aiResponse.get().model(), aiResponse.get().usage());
         }
         return new ImageDescriptionResponseDto(language, description, servedFromCache.get());
     }

@@ -1,6 +1,8 @@
 package com.muse_ai.logic.ai.description;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.AiUsageMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +38,7 @@ public class AiSculptureDescriptionClient {
                 .build();
     }
 
-    public String describeSculpture(String name, List<String> labels, String language) {
+    public AiResponse describeSculpture(String name, List<String> labels, String language) {
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OpenAI API key is not configured");
         }
@@ -67,9 +69,11 @@ public class AiSculptureDescriptionClient {
 
         logUsage(response.usage());
 
-        return Optional.ofNullable(response.choices().getFirst().message().content())
+        String content = Optional.ofNullable(response.choices().getFirst().message().content())
                 .map(String::trim)
                 .orElseThrow(() -> new IllegalStateException("OpenAI response did not include description content"));
+        AiUsageMetrics usageMetrics = toUsage(response.usage());
+        return new AiResponse(content, usageMetrics, model);
     }
 
     private void logUsage(Usage usage) {
@@ -78,6 +82,17 @@ public class AiSculptureDescriptionClient {
         }
         log.info("OpenAI sculpture description tokens used - prompt: {}, completion: {}, total: {}",
                 usage.promptTokens(), usage.completionTokens(), usage.totalTokens());
+    }
+
+    private AiUsageMetrics toUsage(Usage usage) {
+        if (usage == null) {
+            return null;
+        }
+        return new AiUsageMetrics(
+                usage.promptTokens(),
+                usage.completionTokens(),
+                usage.totalTokens()
+        );
     }
 
     private String systemPrompt(String language) {

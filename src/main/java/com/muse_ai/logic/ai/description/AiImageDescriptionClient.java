@@ -1,6 +1,8 @@
 package com.muse_ai.logic.ai.description;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.muse_ai.logic.ai.AiResponse;
+import com.muse_ai.logic.ai.AiUsageMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +37,7 @@ public class AiImageDescriptionClient {
                 .build();
     }
 
-    public String describeImage(String imageBase64, String language) {
+    public AiResponse describeImage(String imageBase64, String language) {
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OpenAI API key is not configured");
         }
@@ -69,9 +71,11 @@ public class AiImageDescriptionClient {
 
         logUsage(response.usage());
 
-        return Optional.ofNullable(response.choices().getFirst().message().content())
+        String content = Optional.ofNullable(response.choices().getFirst().message().content())
                 .map(String::trim)
                 .orElseThrow(() -> new IllegalStateException("OpenAI response did not include description content"));
+        AiUsageMetrics usageMetrics = toUsage(response.usage());
+        return new AiResponse(content, usageMetrics, model);
     }
 
     private String toDataUrl(String imageBase64) {
@@ -88,6 +92,17 @@ public class AiImageDescriptionClient {
         }
         log.info("OpenAI image description tokens used - prompt: {}, completion: {}, total: {}",
                 usage.promptTokens(), usage.completionTokens(), usage.totalTokens());
+    }
+
+    private AiUsageMetrics toUsage(Usage usage) {
+        if (usage == null) {
+            return null;
+        }
+        return new AiUsageMetrics(
+                usage.promptTokens(),
+                usage.completionTokens(),
+                usage.totalTokens()
+        );
     }
 
     private String systemPrompt(String language) {
