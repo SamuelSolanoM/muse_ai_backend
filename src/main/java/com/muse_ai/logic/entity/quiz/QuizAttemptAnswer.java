@@ -1,5 +1,6 @@
 package com.muse_ai.logic.entity.quiz;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class QuizAttemptAnswer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attempt_id", nullable = false)
+    @JsonBackReference
     private QuizAttempt attempt;
 
     @ManyToOne(fetch = FetchType.LAZY)

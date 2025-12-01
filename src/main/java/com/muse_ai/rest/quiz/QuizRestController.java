@@ -47,6 +47,32 @@ public class QuizRestController {
         );
     }
 
+    @GetMapping("/valid")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getAllValidQuizzes(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+
+        Page<Quiz> quizzes = quizRepository.findQuizzesWithQuestions(pageable);
+
+        Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
+        meta.setTotalPages(quizzes.getTotalPages());
+        meta.setTotalElements(quizzes.getTotalElements());
+        meta.setPageNumber(quizzes.getNumber() + 1);
+        meta.setPageSize(quizzes.getSize());
+
+        return new GlobalResponseHandler().handleResponse(
+                "Quizzes with at least 1 question retrieved successfully",
+                quizzes.getContent(),
+                HttpStatus.OK,
+                meta
+        );
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> createQuiz(@RequestBody Quiz quiz, HttpServletRequest request) {

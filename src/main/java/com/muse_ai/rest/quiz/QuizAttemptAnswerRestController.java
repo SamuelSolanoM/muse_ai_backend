@@ -23,21 +23,6 @@ public class QuizAttemptAnswerRestController {
     @Autowired
     private QuizAttemptAnswerRepository quizAttemptAnswerRepository;
 
-    @PostMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> createAnswer(
-            @RequestBody QuizAttemptAnswer answer,
-            HttpServletRequest request) {
-
-        quizAttemptAnswerRepository.save(answer);
-
-        return new GlobalResponseHandler().handleResponse(
-                "Attempt answer created successfully",
-                answer,
-                HttpStatus.CREATED,
-                request
-        );
-    }
 
     @GetMapping("/attempt/{attemptId}")
     @PreAuthorize("isAuthenticated()")

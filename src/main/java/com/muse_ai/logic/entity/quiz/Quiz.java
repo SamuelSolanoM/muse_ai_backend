@@ -36,6 +36,13 @@ public class Quiz {
     @JsonManagedReference
     private List<Question> questions;
 
+    @Transient
+    private int questionCount;
+
+    public int getQuestionCount() {
+        return (questions != null) ? questions.size() : 0;
+    }
+
     public Quiz() {}
 
     public Long getId() { return id; }

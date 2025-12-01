@@ -1,5 +1,7 @@
 package com.muse_ai.logic.entity.quiz;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.muse_ai.logic.entity.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -16,10 +18,12 @@ public class QuizAttempt {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Quiz quiz;
 
     @Column(nullable = false)
@@ -32,6 +36,7 @@ public class QuizAttempt {
     private LocalDateTime timestamp;
 
     @OneToMany(mappedBy = "attempt", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<QuizAttemptAnswer> answers;
 
     public QuizAttempt() {}
