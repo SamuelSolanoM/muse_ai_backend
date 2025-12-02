@@ -2,12 +2,9 @@ package com.muse_ai.rest.quiz;
 
 import com.muse_ai.logic.entity.user.User;
 import com.muse_ai.logic.entity.user.UserRepository;
-import com.muse_ai.rest.quiz.dto.QuizAttemptAnswerResult;
-import com.muse_ai.rest.quiz.dto.QuizAttemptRequest;
-import com.muse_ai.rest.quiz.dto.QuizAttemptAnswerRequest;
+import com.muse_ai.rest.quiz.dto.*;
 import com.muse_ai.logic.entity.http.GlobalResponseHandler;
 import com.muse_ai.logic.entity.quiz.*;
-import com.muse_ai.rest.quiz.dto.QuizAttemptResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -209,5 +206,43 @@ public class QuizAttemptRestController {
                 request
         );
     }
+
+    @GetMapping("/user/{userId}/all")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getAllAttemptsByUser(
+            @PathVariable Long userId,
+            HttpServletRequest request
+    ) {
+        try {
+            List<QuizAttempt> attempts = quizAttemptRepository.findByUserId(userId);
+
+            List<QuizAttemptList> mapped = attempts.stream().map(a -> new QuizAttemptList(
+                    a.getId(),
+                    a.getQuiz() != null ? a.getQuiz().getId() : null,
+                    a.getQuiz() != null ? a.getQuiz().getTitle() : "Sin título",
+                    a.getQuiz() != null ? a.getQuiz().getImageUrl() : null,
+                    a.getScore(),
+                    a.getTotalQuestions(),
+                    a.getTimestamp()
+            )).toList();
+
+            return new GlobalResponseHandler().handleResponse(
+                    "User attempts loaded",
+                    mapped,
+                    HttpStatus.OK,
+                    request
+            );
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new GlobalResponseHandler().handleResponse(
+                    "Error loading attempt history: " + ex.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    request
+            );
+        }
+    }
+
+
 
 }
