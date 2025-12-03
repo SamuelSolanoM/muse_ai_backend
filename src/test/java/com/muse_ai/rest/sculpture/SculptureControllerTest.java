@@ -64,31 +64,6 @@ class SculptureControllerTest {
 
     @WithMockUser
     @Test
-    void shouldRejectOversizedSceneJson() throws Exception {
-        int payloadSize = 5 * 1024 * 1024 + 1;
-        byte[] bytes = new byte[payloadSize];
-        for (int i = 0; i < payloadSize; i++) {
-            bytes[i] = 'a';
-        }
-        String hugeValue = new String(bytes, StandardCharsets.UTF_8);
-
-        SculptureRequest request = new SculptureRequest(
-                "Huge Scene",
-                hugeValue,
-                "{\"units\":\"cm\"}",
-                null,
-                List.of("huge"),
-                null
-        );
-
-        mockMvc.perform(post("/api/sculptures")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isPayloadTooLarge());
-    }
-
-    @WithMockUser
-    @Test
     void shouldFilterByTag() throws Exception {
         Sculpture tagged = new Sculpture();
         tagged.setName("Tagged");

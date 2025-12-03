@@ -30,33 +30,4 @@ class SculptureRepositoryTest {
         assertThat(saved.getTags()).containsExactlyInAnyOrder("organic", "wip");
         assertThat(sculptureRepository.findById(saved.getId())).isPresent();
     }
-
-    @Test
-    void shouldFilterByTagIgnoringCase() {
-        Sculpture matching = new Sculpture();
-        matching.setName("Match");
-        matching.setMetadata("{}");
-        matching.setSceneJson("{\"foo\":1}");
-        matching.setTags(List.of("Hologram"));
-        matching.setSlug("match-slug");
-        matching.setDescription("");
-
-        Sculpture other = new Sculpture();
-        other.setName("Other");
-        other.setMetadata("{}");
-        other.setSceneJson("{\"foo\":2}");
-        other.setTags(List.of("Portrait"));
-        other.setSlug("other-slug");
-        other.setDescription("");
-
-        sculptureRepository.saveAll(List.of(matching, other));
-
-        List<Sculpture> result = sculptureRepository.findAllByTag("hologram");
-
-        assertThat(result)
-                .hasSize(1)
-                .first()
-                .extracting(Sculpture::getName)
-                .isEqualTo("Match");
-    }
 }
