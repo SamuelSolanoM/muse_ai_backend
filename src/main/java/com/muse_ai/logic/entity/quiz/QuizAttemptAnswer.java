@@ -2,6 +2,8 @@ package com.muse_ai.logic.entity.quiz;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "quiz_attempt_answer")
@@ -23,6 +25,7 @@ public class QuizAttemptAnswer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Option selectedOption;
 
     public QuizAttemptAnswer() {}

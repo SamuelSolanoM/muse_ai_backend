@@ -1,11 +1,14 @@
 package com.muse_ai.logic.entity.quiz;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "quiz")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Quiz {
 
     public enum Level {
@@ -36,6 +39,11 @@ public class Quiz {
     @JsonManagedReference
     private List<Question> questions;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<QuizAttempt> attempts;
+
+
     @Transient
     private int questionCount;
 
@@ -62,4 +70,7 @@ public class Quiz {
 
     public List<Question> getQuestions() { return questions; }
     public void setQuestions(List<Question> questions) { this.questions = questions; }
+
+    public List<QuizAttempt> getAttempts() { return attempts; }
+    public void setAttempts(List<QuizAttempt> attempts) { this.attempts = attempts; }
 }

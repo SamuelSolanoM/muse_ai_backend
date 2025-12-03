@@ -1,10 +1,12 @@
 package com.muse_ai.logic.entity.quiz;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "option")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Option {
 
     @Id
